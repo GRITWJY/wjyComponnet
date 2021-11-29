@@ -27,6 +27,21 @@ const config = {
 			component: () => import('@/views/flight/index'),
 			auth: auth
 		},
+		choseseat: {
+			path: '/choseseat',
+			component: () => import('@/views/choseseat/index'),
+			auth: auth
+		},
+		selectquory: {
+			path: '/selectquory',
+			component: () => import('@/views/selectquory/index'),
+			auth: auth
+		},
+		ticket: {
+			path: '/ticket',
+			component: () => import('@/views/ticket/index'),
+			auth: auth
+		},
 		404: {
 			path: '/404',
 			component: () => import('@/views/public/404'),

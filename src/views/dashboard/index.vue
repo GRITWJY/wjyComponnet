@@ -1,4 +1,4 @@
-n<template>
+<template>
   <manage-style>
     222
     <el-button>123456</el-button>

@@ -35,7 +35,7 @@
       </el-aside>
       <el-main class="main-container"><slot /></el-main>
     </el-container>
-    <el-footer height="30px">©湖北天码科技有限责任公司</el-footer>
+    <el-footer height="30px">©湖工皇家航空平台</el-footer>
   </el-container>
 </template>
 
@@ -48,7 +48,10 @@ export default {
       menus: [
         { id: 'dashboard', name: '首页', icon: 'el-icon-s-home' },
         { id: 'user', name: '用户管理', icon: 'el-icon-s-custom' },
-        { id: 'flight', name: 'hangban', icon: 'el-icon-s-custom' },
+        { id: 'flight', name: '航班', icon: 'el-icon-s-custom' },
+        { id: 'choseseat', name: '选择座位', icon: 'el-icon-s-custom' },
+        { id: 'selectquory', name: '输入个人信息提交订单', icon: 'el-icon-s-custom' },
+        { id: 'ticket', name: '订单', icon: 'el-icon-s-custom' },
       ]
     }
   },
