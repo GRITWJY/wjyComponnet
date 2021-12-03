@@ -8,6 +8,8 @@
               <div v-if="row == 2" class="btn-head-margin"></div>
               <el-button
                 class="btn-list-seat"
+                type="primary"
+                :disabled="isdisabled(row,num)"
                 :class="
                   selectedlist.btn_num == num + 1 &&
                   selectedlist.btn_row == row + 1
@@ -21,8 +23,6 @@
             </span>
           </div>
 
-          <!-- <div class="btn-col">
-          </div> -->
         </div>
       </div>
 
@@ -33,16 +33,19 @@
             :labelStyle="{ 'font-weight': '800', color: '#409EFF' }"
           >
             <el-descriptions-item label="行号"
-              >{{selectedlist.btn_row}}</el-descriptions-item
+            >{{ selectedlist.btn_row }}
+            </el-descriptions-item
             >
             <el-descriptions-item label="列号"
-              >{{selectedlist.btn_num}}</el-descriptions-item
+            >{{ selectedlist.btn_num }}
+            </el-descriptions-item
             >
-            <el-descriptions-item label="类型">{{selectedlist.type}}</el-descriptions-item>
-            <el-descriptions-item label="机型"> 波音787 </el-descriptions-item>
-            <el-descriptions-item label="座位价格">{{selectedlist.money}}</el-descriptions-item>
+            <el-descriptions-item label="类型">{{ selectedlist.type }}</el-descriptions-item>
+            <el-descriptions-item label="机型"> 波音787</el-descriptions-item>
+            <el-descriptions-item label="座位价格">{{ selectedlist.money }}</el-descriptions-item>
           </el-descriptions>
         </div>
+        <el-button type="primary" @click="saveSeat">确认，进行下一步</el-button>
       </div>
     </div>
   </manage-style>
@@ -50,6 +53,7 @@
 
 <script>
 import ManageStyle from "../../layout/ManageStyle";
+import { addSeat} from "@/api/plane";
 
 export default {
   components: {
@@ -57,24 +61,57 @@ export default {
   },
   data() {
     return {
-      // selectedlist: { btn_id: null, selected: false },
-      selectedlist: { btn_num: null, btn_row: null, selected_head: false ,type:null,money:null},
+      disablednums: [
+        {row: 3, num: 4},
+        {row: 5, num: 1},
+        {row: 2, num: 4},
+        {row: 4, num: 4},
+        {row: 4, num: 2},
+      ],
+      selectedlist: {
+        fightid: this.$router.param.id,
+        num: null,
+        row: null,
+        selected_head: false,
+        type: null,
+        money: null
+      },
     };
   },
+  created() {
+
+  },
+  computed: {},
   methods: {
+    isdisabled(row, num) {
+      for (let i = 0; i < this.disablednums.length; i++) {
+        if (row == this.disablednums[i].row && num == this.disablednums[i].num) {
+          return true
+        }
+      }
+      return false
+    },
     highlight(row, num) {
-      console.log(row, "+", num);
       this.selectedlist.btn_num = num;
       this.selectedlist.btn_row = row;
       this.selectedlist.selected = true;
-      if(row>2){
+      if (row > 2) {
         this.selectedlist.type = '经济舱'
-        this.selectedlist.money = 55
-      }else{
+        this.selectedlist.money = this.$router.param.money
+      } else {
         this.selectedlist.type = '头等舱'
-        this.selectedlist.money = 85
+        this.selectedlist.money = this.$router.param.money + 500
       }
     },
+    saveSeat() {
+      addSeat(this.selectedlist).then(res => {
+        this.$router.to('selectquory', {
+          fightid: this.selectedlist.fightid,
+          seatid: res.data.id
+        })
+      })
+    },
+
   },
 };
 </script>
@@ -83,14 +120,18 @@ export default {
   padding: 5vh;
   display: flex;
   justify-content: space-between;
+
   .inner {
     padding: 5vh;
     width: 300px;
+
     .btn-list {
       display: flex;
       flex-wrap: wrap;
+
       .btn-margin {
         width: 16.6%;
+
         .btn-list-seat {
           height: 40px;
           margin: 2px;
@@ -98,9 +139,11 @@ export default {
       }
     }
   }
+
   .seat-msg {
     width: 40vw;
     padding: 10vw 5vw 0vw 10vw;
+
     .seat-right {
       background-color: #fff;
       border: 1px solid #ebebeb;
@@ -108,18 +151,23 @@ export default {
     }
   }
 }
+
 .btn-list-active {
-  background-color: #409eff;
+  background-color: #14C193;
 }
+
 .btn-list-active-head {
   background-color: #f56c6c;
 }
+
 .btn-head-margin {
   height: 30px;
 }
+
 .btn-lang-margin {
   width: 30px;
 }
+
 .el-button + .el-button {
   margin: 0px;
 }

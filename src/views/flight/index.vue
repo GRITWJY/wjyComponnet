@@ -11,10 +11,6 @@
             :label="item.label"
             :value="item.value"
           >
-            <span style="float: left">{{ item.label }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{
-              item.value
-            }}</span>
           </el-option>
         </el-select>
 
@@ -27,10 +23,6 @@
             :label="item.label"
             :value="item.value"
           >
-            <span style="float: left">{{ item.label }}</span>
-            <span style="float: right; color: #8492a6; font-size: 13px">{{
-              item.value
-            }}</span>
           </el-option>
         </el-select>
 
@@ -46,36 +38,16 @@
         >
         </el-date-picker>
 
-        <el-button type="primary" class="chosetimebutton"> 查询 </el-button>
+        <el-button type="primary" @click="selectFight" class="chosetimebutton"> 查询</el-button>
       </div>
 
-      <!-- @command="handleCommand" -->
       <div class="selection">
         <span class="selection-text">筛选条件</span>
-        <el-dropdown :hide-on-click="false" trigger="click">
-          <el-button type="primary" class="chosetimebutton">
-            更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="b">
-              <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="用户管理" name="first"
-                  >用户吃饭啦！</el-tab-pane
-                >
-                <el-tab-pane label="配置管理" name="second"
-                  >配置管理</el-tab-pane
-                >
-              </el-tabs>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
         <el-dropdown @command="handleCommand" trigger="click">
           <el-button type="primary" class="chosetimebutton">
             按照排序<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="d">行程最短时间</el-dropdown-item>
             <el-dropdown-item command="m">最低价格</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -87,38 +59,36 @@
         <i class="el-icon-s-promotion"></i>
         <span class="text">航班列表</span>
       </div>
-      <div v-for="(item, index) of 5" :key="index">
+      <div v-for="(item, index) of resultList" :key="index">
         <div class="flight-outbox">
           <div class="flight-innerbox">
-            <div class="flight-time">15:09-16:35(次日)</div>
+            <div class="flight-time">{{ item.depatureHour }} - {{ item.arrivalHour }}</div>
             <div class="flight-message">
-              <el-timeline :reverse="reverse">
-                <el-timeline-item
-                  v-for="(activity, index) in activities"
-                  :key="index"
-                  :color="timelinecolor"
-                  :timestamp="activity.timestamp"
-                >
-                  {{ activity.content }}
+              <el-timeline>
+                <el-timeline-item color="#1890ff" :timestamp="item.depatureDay">
+                  {{ item.depatureCity }}
+                </el-timeline-item>
+                <el-timeline-item color="#1890ff" :timestamp="item.arrivalDay">
+                  {{ item.arrivalCity }}
                 </el-timeline-item>
               </el-timeline>
             </div>
             <div class="flight-where">
-              <div class="country">阿富汗</div>
-              <i class="el-icon-bottom" />
-              <div class="country">中国</div>
+              <div class="country">{{ item.depatureCity }}</div>
+              <i class="el-icon-bottom"/>
+              <div class="country">{{ item.arrivalCity }}</div>
             </div>
             <div class="flight-contime">
               <div class="contime-text">行程时长</div>
               <div class="contime-text">
-                <i class="el-icon-time" />
-                19h36
+                <i class="el-icon-time"/>
+                {{ item.time }}
               </div>
             </div>
             <div class="flight-money">
               <el-row>
-                <el-button type="primary" round @click="a">
-                  CNY 16131
+                <el-button type="primary" round @click="$router.to('choseseat',{id:item.id,money:item.fare})">
+                  CNY {{ item.fare }}
                 </el-button>
               </el-row>
               <div class="seat-text">该航班还剩1个座位！</div>
@@ -143,8 +113,11 @@
 
 <script>
 import ManageStyle from "../../layout/ManageStyle.vue";
+import {getFightList} from "@/api/plane";
+import moment from 'moment'
+
 export default {
-  components: { ManageStyle },
+  components: {ManageStyle},
   data() {
     return {
       pickerOptions: {
@@ -178,8 +151,8 @@ export default {
       },
       fromcities: [
         {
-          value: "Beijing",
-          label: "北京",
+          value: "武汉",
+          label: "武汉",
         },
         {
           value: "Shanghai",
@@ -204,7 +177,7 @@ export default {
       ],
       tocities: [
         {
-          value: "Beijing",
+          value: "北京",
           label: "北京",
         },
         {
@@ -243,11 +216,38 @@ export default {
       pickertime: "",
       timelinecolor: "#1890ff",
       activeName: "second",
+
+      resultList: [],
     };
   },
+  created() {
+  },
   methods: {
-    handleCommand(command) {
-      this.$message("click on item " + command);
+    selectFight() {
+      console.log(this.fromplace)
+      getFightList({
+        arrivalCity: this.toplace,
+        depatureCity: this.fromplace,
+        depatureTime: moment(this.pickertime).format('YYYY-MM-DD HH:mm:ss')
+      }).then(res => {
+        this.resultList = res.data
+        this.resultList = this.resultList.map((item) => {
+          item.depatureDay = moment(item.depatureTime).format('YYYY-MM-DD')
+          item.depatureHour = moment(item.depatureTime).format('HH:mm')
+          item.arrivalDay = moment(item.arrivaltime).format('YYYY-MM-DD')
+          item.arrivalHour = moment(item.arrivaltime).format('HH:mm')
+
+          let time = moment.duration(moment(item.arrivaltime) - moment(item.depatureTime))
+          item.time = time.get('hours') + 'h' + time.get('minutes') + '分'
+          return item
+        })
+      })
+    },
+
+    handleCommand() {
+      this.resultList.sort((a, b) => {
+        return a.fare - b.fare
+      })
     },
   },
 };
@@ -256,38 +256,47 @@ export default {
 .el-dropdown {
   vertical-align: top;
 }
+
 .el-dropdown + .el-dropdown {
   margin-left: 15px;
 }
+
 .el-icon-arrow-down {
   font-size: 12px;
 }
+
 .chosetimebutton {
   border-radius: 20px;
 }
+
 .flight-out {
   width: 80%;
   margin: 0px auto;
   display: block;
 }
+
 .time-place {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+
   .place-pick {
     margin: 2vh;
   }
+
   .time-pick {
     margin: 2vh;
   }
 }
+
 .selection {
   margin-top: 5vh;
   margin-bottom: 2vh;
   display: flex;
   justify-content: center;
   align-items: center;
+
   .selection-text {
     margin-right: 2vh;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
@@ -301,19 +310,22 @@ export default {
   // display: grid;
   display: block;
   margin: 0px auto;
+
   .text-out {
     padding: 3vh 0vh 3vh 2vh;
     display: block;
     margin: 0px auto;
+
     .text {
       font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-        sans-serif;
+      sans-serif;
       font-weight: 900;
       font-size: 25px;
       color: #003145;
       margin-left: 15px;
     }
   }
+
   .flight-outbox {
     background-color: #fff;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
@@ -321,6 +333,7 @@ export default {
     padding: 8px 16px;
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
     font-weight: 400;
+
     .flight-innerbox {
       display: grid;
       grid-template-columns: minmax(25%, 2fr) 1fr 1fr 1fr;
@@ -328,39 +341,47 @@ export default {
       // grid-column: 1;
       // grid-row: 1;
       align-self: center;
+
       .flight-time {
         grid-column: 1;
         grid-row: 1;
       }
+
       .flight-message {
         grid-column: 1 / span2;
         grid-row: 2/4;
         padding: 16px 8px 0px 8px;
       }
+
       .flight-where {
         grid-column: 2;
         grid-row: 1/3;
         align-self: center;
         display: flex;
         flex-direction: column;
+
         .country {
           padding: 3vh 0vh;
         }
       }
+
       .flight-contime {
         grid-column: 3;
         grid-row: 2/4;
         align-self: center;
         padding: 8px;
+
         .contime-text {
           margin: 8px;
         }
       }
+
       .flight-money {
         grid-column: 4;
         grid-row: 1/4;
         align-self: center;
         justify-self: center;
+
         .seat-text {
           margin: 8px;
           font-size: 13px;
@@ -369,22 +390,25 @@ export default {
           font-weight: 700;
         }
       }
+
       // .flight-foot{
       //     grid-column: 1;
       //     grid-row: 4/5;
       // }
     }
   }
+
   .bottom-area {
     padding: 2vh;
     display: block;
+
     .bottem-text {
       text-align: center;
       max-width: 1016px;
       font-size: 0.75rem;
       line-height: 1.75;
       font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-        sans-serif;
+      sans-serif;
       font-weight: 400;
       color: #707575;
     }
@@ -396,6 +420,7 @@ export default {
   margin: 0px auto;
   width: 60%;
   align-self: center;
+
   .el-header-card {
     background-color: #b3c0d1;
     color: #333;
@@ -403,6 +428,7 @@ export default {
     line-height: 30px;
     // height: 10px;
   }
+
   .el-aside-card {
     background-color: #d3dce6;
     color: #333;

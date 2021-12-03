@@ -1,8 +1,8 @@
 
 const auth = ['admin', 'worker']
 const config = {
-	// BASE_URL: 'https://junesunray.com/eim',
-	BASE_URL: 'http://localhost:8090',
+	BASE_URL: 'https://junesunray.com/plane',
+	// BASE_URL: 'http://localhost:8090',
 	REQUEST_TIMEOUT: 5000,
 	auth: auth,
 	pages: {
