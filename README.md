@@ -1,24 +1,6 @@
-# test2
+# 前端组件库
 
-## Project setup
-```
-npm install
-```
+-----2022-02-25
+自己封装的前端组件，包括PC，移动等.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+现在还只是一个建一个容器，把遇到的先放在里面，等后面有时间再来整理
