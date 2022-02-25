@@ -1,7 +1,9 @@
 import copy from "@/directive/copy";
+import longpress from '@/directive/longpress'
 
 const directives = {
-	copy
+	copy,
+	longpress
 }
 
 export default {

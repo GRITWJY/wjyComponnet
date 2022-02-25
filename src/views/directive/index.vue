@@ -1,6 +1,7 @@
 <template>
   <div>
     <button v-copy=copyText>复制</button>
+    <button v-longpress=longpress>长按</button>
   </div>
 </template>
 
@@ -8,12 +9,16 @@
 export default {
   data() {
     return {
-      copyText:"fashfuisafiulas"
+      copyText: "fashfuisafiulas"
     }
   },
   created() {
   },
-  methods: {}
+  methods: {
+    longpress() {
+      alert('生效')
+    }
+  }
 }
 </script>
 
