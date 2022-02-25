@@ -1,34 +1,40 @@
 <template>
   <div id="app">
-    <component :is="curPage" />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import router from './core/router'
 
 export default {
-  name: 'App',
-  components: router.components,
-  data() {
-    return {
-      curPage: undefined,
-      isRouterAlive:true
-    }
-  },
-  created() {
-        this.curPage = 'c' + this.$router.curPage
-        this.$router.onPathChange = () => {
-          this.curPage = 'c' + this.$router.curPage
-        }
-        window.vm = this
-  }
+
 }
 </script>
 
-<style lang="scss">
-*{
+<style>
+@import "styles/iconfont/iconfont.css";
+@import "styles/layui/css/layui.css";
+
+
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
   margin: 0;
   padding: 0;
 }
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
 </style>

@@ -1,23 +1,19 @@
 import Vue from 'vue'
 
-import Cookies from 'js-cookie'
-import Element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css';
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css'
+import Directives from './directive/directives'
 
 import App from './App.vue'
-import june from './core/main'
+import router from './router'
 
-Vue.use(Element, {
-  size: Cookies.get('size') || 'medium' // set element-ui default size
-})
-
-Vue.prototype.$auth = june.auth
-Vue.prototype.$router = june.router
-Vue.prototype.$caches = june.caches
+Vue.use(ElementUI);
+Vue.use(Directives)
 
 Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
+  router,
   render: h => h(App)
 });
