@@ -1,3 +1,14 @@
+
+/*
+需求：实现长按，用户需要按下并按住按钮几秒钟，触发相应的事件
+思路：
+		1. 创建一个计时器， 2 秒后执行函数
+		2. 当用户按下按钮时触发mousedown事件，启动计时器；用户松开按钮时调用mouseout事件。
+		3. 如果mouseup事件 2 秒内被触发，就清除计时器，当作一个普通的点击事件
+		4. 如果计时器没有在 2 秒内清除，则判定为一次长按，可以执行关联的函数。
+		5. 在移动端要考虑touchstart，touchend事件
+ */
+
 const longpress = {
 	bind: function (el, binding, vNode) {
 		if (typeof binding.value !== 'function') {
