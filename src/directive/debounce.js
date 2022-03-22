@@ -9,9 +9,9 @@ const debounce = {
 	//被绑定元素插入父节点时调用
 	inserted: function (el, binding) {
 		let timer
-		el.addEventListener('keyup', () => {
+		el.addEventListener('click', () => {
 			if (timer) {
-				clearTimeout()
+				clearTimeout(timer)
 			}
 			timer = setTimeout(() => {
 				binding.value()

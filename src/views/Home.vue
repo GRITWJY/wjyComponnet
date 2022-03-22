@@ -17,7 +17,7 @@
       <div class="layui-container">
         <p class="title">专为无代码而研制的<span>核心产品</span></p>
         <div class="layui-row layui-col-space25">
-          <div class="layui-col-sm6 layui-col-md3">
+          <div class="layui-col-sm6 layui-col-md3 ">
             <div class="content">
               <div><img src="res/static/img/Big_icon1.png"></div>
               <div style="height: 200px;">
