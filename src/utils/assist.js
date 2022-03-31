@@ -1,19 +1,18 @@
 /** 向上找到最近的指定组件————findCompoenntUpward
  *
- *
- * 在 while 语句里不断向上覆盖当前的 parent 对象，
- * 通过判断组件（即 parent）的 name 与传入的 componentName 是否一致，
- * 直到直到最近的一个组件为止。
- *
- *
  * @param context  当前上下文，比如你要基于哪个组件来向上寻找
  * @param componentName  要找的组件的 name
  * @returns {Vue}
  */
 function findComponentUpward(context, componentName) {
+  // context：当前上下文，基于哪个组件向上寻找，一般是this
+  // 第二个是要查找的组件的name
+
   let parent = content.$parent;
   let name = parent.$options.name;
 
+  // 在 while 语句里不断向上覆盖当前的 parent 对象，
+  // 通过判断组件（即 parent）的 name 与传入的 componentName 是否一致，直到直到最近的一个组件为止。
   while (parent && (!name || [componentName].indexOf(name) < 0)) {
     parent = parent.$parent;
     if (parent) name = parent.$options.name;

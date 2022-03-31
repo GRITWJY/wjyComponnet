@@ -9,6 +9,11 @@ const routes = [
     path: "/",
     name: "form",
     component: () => import("@/examples/example")
+  },
+  {
+    path: "/display",
+    name: "display",
+    component: () => import("@/views/display")
   }
 
   // {
