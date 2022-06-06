@@ -5,17 +5,12 @@
 </template>
 
 <script>
-
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-@import "styles/iconfont/iconfont.css";
-@import "styles/layui/css/layui.css";
-
-
+/*@import "styles/iconfont/iconfont.css";*/
+/*@import "styles/layui/css/layui.css";*/
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -35,6 +30,4 @@ body {
 * {
   box-sizing: border-box;
 }
-
-
 </style>

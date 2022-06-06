@@ -1,20 +1,25 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "form",
-    component: () => import("@/examples/example")
-  },
-  {
-    path: "/display",
-    name: "display",
-    component: () => import("@/views/display")
+    path: "/ect/card",
+    name: "card",
+    component: () => import("@/examples/card")
   }
+
+  // {
+  //   path: "/",
+  //   name: "form",
+  //   component: () => import("@/examples/example")
+  // },
+  // {
+  //   path: "/display",
+  //   name: "display",
+  //   component: () => import("@/views/display")
+  // }
 
   // {
   // 	path: '/',
